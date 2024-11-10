@@ -1,5 +1,6 @@
 import type { Core } from '@strapi/strapi';
 import { PLUGIN_ID } from '../pluginId';
+const fs = require('fs');
 
 const pdfGenerator = ({ strapi }: { strapi: Core.Strapi }) => ({
   async create(ctx) {
@@ -38,10 +39,17 @@ const pdfGenerator = ({ strapi }: { strapi: Core.Strapi }) => ({
       );
       return;
     }
+    const templateBytes = fs.readFileSync(ctx.isTest ? template.file.url : `public${template.file.url}`);
     const genDoc = await strapi
       .plugin(PLUGIN_ID)
       .service('service')
-      .createPDF(template.file.url, docData, template.name, ctx.isTest);
+      .createPDF(
+        templateBytes,
+        docData, 
+        template.name, 
+        template.flattenDocument, 
+        ctx.isTest
+      );
 
     ctx.res.writeHead(200, {
       'Content-Length': Buffer.byteLength(genDoc),

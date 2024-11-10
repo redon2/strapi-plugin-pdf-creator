@@ -2,8 +2,7 @@ import type { Core } from '@strapi/strapi';
 const { PDFDocument, rgb } = require('pdf-lib');
 const fs = require('fs');
 
-async function createPageFromTemplate(template, data, templateName, isTest) {
-  const templateBytes = fs.readFileSync(isTest ? template : `public${template}`);
+async function createPageFromTemplate(templateBytes, data, templateName, flattenDocument, isTest) {
   const pdfDoc = await PDFDocument.load(templateBytes);
   const form = pdfDoc.getForm();
   const fields = form.getFields();
@@ -96,8 +95,7 @@ async function createPageFromTemplate(template, data, templateName, isTest) {
       color: rgb(0.95, 0.1, 0.1),
     });
   }
-
-  form.flatten();
+  if (flattenDocument) form.flatten();
   return await pdfDoc.save();
 }
 
@@ -106,12 +104,19 @@ const service = ({ strapi }: { strapi: Core.Strapi }) => ({
     return 'Welcome to Strapi 🚀';
   },
   async createPDF(
-    templatePath: string,
+    templateBytes: any,
     data: any,
     templateName: string,
+    flattenDocument: boolean,
     isTest?: boolean
   ): Promise<Uint8Array> {
-    const pdf = await createPageFromTemplate(templatePath, data, templateName, isTest);
+    const pdf = await createPageFromTemplate(
+      templateBytes,
+      data,
+      templateName,
+      flattenDocument,
+      isTest
+    );
     return pdf;
   },
 });

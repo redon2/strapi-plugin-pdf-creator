@@ -13,7 +13,12 @@
     "directory": "."
   },
   "version": "0.1.2",
-  "keywords": [],
+  "keywords": [
+    "strapi",
+    "plugin",
+    "pdf",
+    "template"
+  ],
   "type": "commonjs",
   "exports": {
     "./package.json": "./package.json",
