@@ -1,0 +1,14 @@
+{
+    "home.title": "PDF Generator",
+    "home.subtitle": "Simple PDF generator button for your content",
+    "home.button": "Home",
+    "error": "Error1",
+    "error.loadingTemplates": "An error occurred while loading the email templates",
+    "error.loadingSettings": "An error occured while loading settings",
+    "tab.title.settings": "Settings",
+    "tab.title.main": "Templates",
+    "settings.message": "The settings of this plugin are configured via the plugin.ts file in the config folder. Restart Strapi once you make changes to these settings.",
+    
+    "SettingsNav.section-label": "PDF Creator",
+    "SettingsNav.plugin.title": "Settings"
+}
