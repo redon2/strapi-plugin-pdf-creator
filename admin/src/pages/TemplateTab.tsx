@@ -68,17 +68,15 @@ const TemplateTab: React.FC = () => {
                 {Array.isArray(templates) && templates.length > 0 ? (
                     templates.map(template => (
                         <Tr key={template.id}>
-                            <Td>{template.id}</Td>
-                            <Td>{template.name}</Td>
-                            <Td>{template?.collectionName}</Td>
-                            {/* <Td>{file.categories.join(', ')}</Td>
-                            <Td>{file.contact}</Td> */}
-                            <Td>FAKE</Td>
+                            <Td><Typography>{template.id}</Typography></Td>
+                            <Td><Typography>{template.name}</Typography></Td>
+                            <Td><Typography>{template?.collectionName}</Typography></Td>
+                            <Td><Typography>coming soon.</Typography></Td>
                         </Tr>
                     ))
                 ) : (
                     <Tr>
-                        <Td colSpan={7}>No Templates found.</Td>
+                        <Td colSpan={4}><Typography>No Templates found.</Typography></Td>
                     </Tr>
                 )}
             </Tbody>

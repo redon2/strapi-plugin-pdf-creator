@@ -34,7 +34,7 @@ const GenerateFileButton = () => {
         const isCreate = location.pathname.includes('/create');
         if (isCreate) return setIsVisible(false);
 
-        const { data } = await client.get<ResultTemplateType>(`/content-manager/collection-types/plugin::p${PLUGIN_ID}.template`);
+        const { data } = await client.get<ResultTemplateType>(`/content-manager/collection-types/plugin::${PLUGIN_ID}.template`);
         if (data.results.length > 0) {
           data.results.forEach(item => {
             if (location.pathname.includes(item.collectionName)) {
@@ -49,7 +49,7 @@ const GenerateFileButton = () => {
     };
 
     checkVisibility();
-  }, [location]);
+  }, [client]);
 
   const collectionType = getCollectionType();
 

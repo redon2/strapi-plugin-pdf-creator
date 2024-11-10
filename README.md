@@ -9,7 +9,7 @@ This plugin was developed for the 5.X Strapi version. It has not been tested wit
 
 ## ⚙️ Installation
 
-To install the Strapi Advanced UUID Plugin, simply run one of the following command:
+To install the Strapi PDF Creator Plugin, simply run one of the following command:
 
 ```
 npm install @redon2inc/strapi-plugin-pdf-creator
@@ -19,18 +19,27 @@ npm install @redon2inc/strapi-plugin-pdf-creator
 yarn add @redon2inc/strapi-plugin-pdf-creator
 ```
 
-# Functionality:
+## Functionality:
 - Generate buttons only appears on edit views.
 - Components single types and plugin content are not supported.
 - Functionality only works for the Super Admin role
 - Documents are flattened once generated. 
 
-# Config
+## Config
+add the following to your `config/plugin.ts`
+
+```javascript
+{
+  'strapi-plugin-pdf-creator': {
+    enabled: true,
+    config: {
+      permissions: 'none' // coming soon
+    }
+  },
+}
 ```
 
-```
-
-# Template requirements
+## Template requirements
 - The PDF template's form field names must match the names as the collection type. Only matching names will be used to populate the pdf.
 - TextFields use Text type fields.
 - Buttons will be replaced with Media type fields. *Only when PDFs are flattened.*
@@ -38,10 +47,16 @@ yarn add @redon2inc/strapi-plugin-pdf-creator
 - RadioGroups, OptionLists, Dropdowns fields use Enumeration type fields.
 
 
-# TODO:
-Security -> create roles section
-Option to flatten documents -> global
-Option for other providers other than local
-Create examples page
-Beautify Dates
-UI function to validate template
+## TODO:
+- Security: Allow other roles to generate documents
+- Add option to not flatten documents
+- Beautify date fields.
+- Settings function to validate template against schema.
+
+## 👍 Contribute
+
+1. Add a [GitHub Star](https://github.com/redon2/strapi-plugin-pdf-creator/stargazers) to the project.
+
+## 🧾 License
+
+This plugin is licensed under the MIT License.

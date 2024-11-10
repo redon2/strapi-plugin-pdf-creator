@@ -49,11 +49,11 @@ const SettingsPage = () => {
         id="header"
         title={translate("home.title")}
         subtitle={translate("home.subtitle")}
-        primaryAction={
-          <Button onClick={() => toggleNotification({ type: 'success', message: 'Home clicked!' })}>
-            {translate("home.button")}
-          </Button>
-        }
+        // primaryAction={
+        //   <Button onClick={() => toggleNotification({ type: 'success', message: 'Home clicked!' })}>
+        //     {translate("home.button")}
+        //   </Button>
+        // }
       />
       <Layouts.Content>
         {loading ? ( 

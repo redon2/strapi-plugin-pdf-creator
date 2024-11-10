@@ -7,7 +7,7 @@
     "error.loadingSettings": "An error occured while loading settings",
     "tab.title.settings": "Settings",
     "tab.title.main": "Templates",
-    "settings.message": "The settings of this plugin are configured via the plugin.ts file in the config folder. Restart Strapi once you make changes to these settings.",
+    "settings.message": "BETA!. The settings of this plugin are configured via the plugin.ts file in the config folder. Restart Strapi once you make changes to these settings.",
     
     "SettingsNav.section-label": "PDF Creator",
     "SettingsNav.plugin.title": "Settings"

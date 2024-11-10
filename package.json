@@ -8,7 +8,7 @@
     "example": "examples"
   },
   "repository": {
-    "url": "git+https://github.com/Dulajdeshan/strapi-advanced-uuid.git",
+    "url": "git+https://github.com/edon2/strapi-plugin-pdf-creator.git",
     "type": "git",
     "directory": "."
   },

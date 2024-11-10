@@ -16,10 +16,6 @@ const SettingsTab: React.FC<SettingsTabProps> = ({ settings }) => {
                 {settings ? (
                     <>
                         <Box marginBottom={2}>
-                            <Typography variant="beta">Folder ID: </Typography>
-                            <Typography variant="gamma">{settings.folder_id}</Typography>
-                        </Box>
-                        <Box marginBottom={2}>
                             <Typography variant="beta">Permissions: </Typography>
                             <Typography variant="gamma">{settings.permissions}</Typography>
                         </Box>
