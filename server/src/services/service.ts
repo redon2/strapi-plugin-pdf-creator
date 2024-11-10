@@ -1,17 +1,15 @@
-import { Checkbox } from '@strapi/design-system';
 import type { Core } from '@strapi/strapi';
 const { PDFDocument, rgb } = require('pdf-lib');
 const fs = require('fs');
 
-async function createPageFromTemplate(template, data, templateName) {
-  const templateBytes = fs.readFileSync(`public${template}`);
+async function createPageFromTemplate(template, data, templateName, isTest) {
+  const templateBytes = fs.readFileSync(isTest ? template : `public${template}`);
   const pdfDoc = await PDFDocument.load(templateBytes);
   const form = pdfDoc.getForm();
   const fields = form.getFields();
-  if(templateName!==''){
+  if (templateName !== '') {
     pdfDoc.setTitle(templateName);
   }
-  
 
   const errors = [];
   const getFieldValue = (name) => data[name] || null;
@@ -23,7 +21,7 @@ async function createPageFromTemplate(template, data, templateName) {
     switch (type) {
       case 'PDFTextField':
         const text = getFieldValue(name);
-        if (text){
+        if (text) {
           form.getTextField(name).setText(text || '');
         }
         break;
@@ -32,7 +30,7 @@ async function createPageFromTemplate(template, data, templateName) {
         const button = form.getButton(name);
         const buttonData = getFieldValue(name);
         if (buttonData?.url) {
-          const imageUrl = `public${buttonData.url}`;
+          const imageUrl = isTest ? buttonData.url : `public${buttonData.url}`;
           const imageBytes = fs.readFileSync(imageUrl);
           const image = await pdfDoc.embedPng(imageBytes);
           button.setImage(image);
@@ -83,9 +81,6 @@ async function createPageFromTemplate(template, data, templateName) {
           }
         }
         break;
-
-      default:
-        break;
     }
   }
 
@@ -110,8 +105,13 @@ const service = ({ strapi }: { strapi: Core.Strapi }) => ({
   getWelcomeMessage() {
     return 'Welcome to Strapi 🚀';
   },
-  async createPDF(templatePath: string, data: any, templateName: string): Promise<Uint8Array> {
-    const pdf = await createPageFromTemplate(templatePath, data, templateName);
+  async createPDF(
+    templatePath: string,
+    data: any,
+    templateName: string,
+    isTest?: boolean
+  ): Promise<Uint8Array> {
+    const pdf = await createPageFromTemplate(templatePath, data, templateName, isTest);
     return pdf;
   },
 });
