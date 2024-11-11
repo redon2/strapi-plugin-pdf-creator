@@ -5,6 +5,7 @@ import services from '../server/src/services/index';
 
 describe('Controller', () => {
   let strapi: any;
+  let strapi2: any;
   let ctx: any;
 
   beforeEach(async function () {
@@ -33,15 +34,20 @@ describe('Controller', () => {
 
   describe('Test plugin with blank PDF', () => {
     it('should generate a PDF and send the response', async function () {
-      const docUrl = '__tests__/pdfFiles/blank.pdf';
-      const templateFilePath = path.resolve(docUrl);
-      const mockTemplateBytes = fs.readFileSync(templateFilePath);
       strapi = {
         plugin: jest.fn().mockReturnValue({
           service: jest.fn().mockReturnValue({
             createPDF: services.service({ strapi }).createPDF,
+            BufferIamgesOnData: services.images({ strapi }).BufferIamgesOnData,
           }),
         }),
+        config: {
+          get: jest.fn().mockReturnValue({
+            beautifyDate: {
+              fields: ['dateField'],
+            },
+          }),
+        },
         documents: jest.fn().mockImplementation((collectionType: string) => ({
           findOne: jest.fn().mockResolvedValue({
             file: { url: '__tests__/pdfFiles/blank.pdf' },
@@ -49,7 +55,10 @@ describe('Controller', () => {
           }),
           findFirst: jest.fn().mockResolvedValue({
             documentId: '1',
-            data: 'Fake Document Data',
+            data: {
+              id: 1,
+              name: 'mario',
+            },
           }),
         })),
         db: {
@@ -78,15 +87,24 @@ describe('Controller', () => {
       });
     });
   });
+
   describe('Test invalid params 1', () => {
     it('should generate a PDF and send the response', async function () {
-      ctx.request.body.data={}; // override values      
+      ctx.request.body.data = {}; // override values
+
       strapi = {
         plugin: jest.fn().mockReturnValue({
           service: jest.fn().mockReturnValue({
             createPDF: services.service({ strapi }).createPDF,
           }),
         }),
+        config: {
+          get: jest.fn().mockReturnValue({
+            beautifyDate: {
+              fields: ['dateField'],
+            },
+          }),
+        },
         documents: jest.fn().mockImplementation((collectionType: string) => ({
           findOne: jest.fn().mockResolvedValue(false),
         })),
@@ -105,13 +123,14 @@ describe('Controller', () => {
           },
         },
       };
+
       const controller = controllers.pdfGenerator({ strapi });
 
       await controller.create(ctx);
-      expect(ctx.throw).toHaveBeenCalledWith(400, expect.any(String)); // You can also check for a message if needed
-
+      expect(ctx.throw).toHaveBeenCalledWith(400, expect.any(String));
     });
   });
+
   describe('Test invalid params 2', () => {
     it('should generate a PDF and send the response', async function () {
       strapi = {
@@ -120,6 +139,13 @@ describe('Controller', () => {
             createPDF: services.service({ strapi }).createPDF,
           }),
         }),
+        config: {
+          get: jest.fn().mockReturnValue({
+            beautifyDate: {
+              fields: ['dateField'],
+            },
+          }),
+        },
         documents: jest.fn().mockImplementation((collectionType: string) => ({
           findOne: jest.fn().mockResolvedValue(false),
         })),
@@ -138,11 +164,11 @@ describe('Controller', () => {
           },
         },
       };
+
       const controller = controllers.pdfGenerator({ strapi });
 
       await controller.create(ctx);
       expect(ctx.throw).toHaveBeenCalledWith(404, expect.any(String)); // You can also check for a message if needed
-
     });
   });
 });

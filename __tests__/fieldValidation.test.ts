@@ -40,8 +40,16 @@ describe('Controller', () => {
         plugin: jest.fn().mockReturnValue({
           service: jest.fn().mockReturnValue({
             createPDF: services.service({ strapi }).createPDF,
+            BufferIamgesOnData: services.images({ strapi }).BufferIamgesOnData,
           }),
         }),
+        config: {
+          get: jest.fn().mockReturnValue({
+            beautifyDate: {
+              fields: ['dateField'],
+            },
+          }),
+        },
         documents: jest.fn().mockImplementation((collectionType: string) => ({
           findOne: jest.fn().mockResolvedValue({
             file: { url: docUrl },
@@ -54,7 +62,8 @@ describe('Controller', () => {
             email: 'fake@email',
             check_box: true,
             icon: {
-                url :'__tests__/pdfFiles/mario_emblem.png'
+                url :'__tests__/pdfFiles/mario_emblem.png',
+                mime: 'image/png'
             },
             list: 'list',
             combo: 'comboItem',

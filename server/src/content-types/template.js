@@ -36,6 +36,11 @@ module.exports = {
       required: true,
       default: false,
     },
+    flattenDocument: {
+      type: 'boolean',
+      required: true,
+      default: true,
+    },
     file: {
       type: "media",
       multiple: false,

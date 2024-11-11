@@ -12,8 +12,13 @@
     "type": "git",
     "directory": "."
   },
-  "version": "0.1.2",
-  "keywords": [],
+  "version": "0.1.3",
+  "keywords": [
+    "strapi",
+    "plugin",
+    "pdf",
+    "template"
+  ],
   "type": "commonjs",
   "exports": {
     "./package.json": "./package.json",

@@ -1,6 +1,11 @@
 import type { Core } from '@strapi/strapi';
 import { PLUGIN_ID } from '../pluginId';
-
+const fs = require('fs');
+interface Config {
+  beautifyDate?: {
+    fields: string[];
+  };
+}
 const pdfGenerator = ({ strapi }: { strapi: Core.Strapi }) => ({
   async create(ctx) {
     const reqData = ctx.request.body?.data;
@@ -26,11 +31,11 @@ const pdfGenerator = ({ strapi }: { strapi: Core.Strapi }) => ({
         filters: { documentId: reqData.documentId },
         populate: '*',
       });
+      docData = await strapi.plugin(PLUGIN_ID).service('images').BufferIamgesOnData(docData, ctx.isTest);
     } catch (error) {
       ctx.throw(400, `${reqData.collectionType} not found`);
       return;
     }
-
     if (!docData) {
       ctx.throw(
         404,
@@ -38,10 +43,14 @@ const pdfGenerator = ({ strapi }: { strapi: Core.Strapi }) => ({
       );
       return;
     }
+    const templateBytes = fs.readFileSync(
+      ctx.isTest ? template.file.url : `public${template.file.url}`
+    );
+    const conf: Config = strapi.config.get(`plugin::${PLUGIN_ID}`);
     const genDoc = await strapi
       .plugin(PLUGIN_ID)
       .service('service')
-      .createPDF(template.file.url, docData, template.name, ctx.isTest);
+      .createPDF(templateBytes, docData, template.name, template.flattenDocument, conf.beautifyDate);
 
     ctx.res.writeHead(200, {
       'Content-Length': Buffer.byteLength(genDoc),

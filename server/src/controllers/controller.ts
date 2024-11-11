@@ -9,7 +9,7 @@ const controller = ({ strapi }: { strapi: Core.Strapi }) => ({
       .getWelcomeMessage();
   },
   settings(ctx) {
-    const conf = strapi.config.get(`plugin.${PLUGIN_ID}`);
+    const conf = strapi.config.get(`plugin::${PLUGIN_ID}`);
     ctx.body = conf;
   },
   contentTypes(ctx) {
