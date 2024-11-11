@@ -63,8 +63,6 @@ describe('Controller', () => {
             check_box: true,
             icon: {
                 url :'__tests__/pdfFiles/mario_emblem.png',
-                // imageBytes: new Buffer('73 10 cd 83 2a e7 70 bb 4d 36 '),
-                // imageBytes: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdj+L+U4T8ABu8CpCYJ1DQAAAAASUVORK5CYII=',
                 mime: 'image/png'
             },
             list: 'list',
