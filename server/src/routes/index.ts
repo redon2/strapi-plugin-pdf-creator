@@ -29,7 +29,15 @@ export default [
     path: '/create-pdf',
     handler: 'pdfGenerator.create',
     config: {
-      policies: [`plugin::${PLUGIN_ID}.isAdmin`]
+      policies: [
+        'admin::isAuthenticatedAdmin',
+        {
+          name: 'admin::hasPermissions',
+          config: {
+            actions: [`plugin::${PLUGIN_ID}.generate`],
+          },
+        },
+      ],
     },
   },
 

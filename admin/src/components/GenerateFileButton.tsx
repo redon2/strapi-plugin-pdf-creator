@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Typography, Flex } from "@strapi/design-system";
-import { useFetchClient, useAuth } from '@strapi/strapi/admin';
+import { useFetchClient, useAuth, isFetchError, useNotification } from '@strapi/strapi/admin';
 import { Download } from '@strapi/icons';
 import { useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -19,6 +19,7 @@ const GenerateFileButton = () => {
   });
 
   const location = useLocation();
+  const { toggleNotification } = useNotification();
   const client = useFetchClient();
   const [isVisible, setIsVisible] = useState(false);
   const [templates, setTemplates] = useState<TemplateType[]>([]);
@@ -39,12 +40,16 @@ const GenerateFileButton = () => {
           data.results.forEach(item => {
             if (location.pathname.includes(item.collectionName)) {
               setIsVisible(true);
-              setTemplates(prevTemplates => [...prevTemplates, item]); 
+              setTemplates(prevTemplates => [...prevTemplates, item]);
             }
           });
         }
-      } catch (error) {
-        console.error('Error checking button visibility:', error);
+      } catch (err) {
+        if (isFetchError(err)) {
+          console.warn(': You do not have permission to view PDF Templates.');
+        } else {
+          console.error('An unknown error occurred:', err);
+        }
       }
     };
 
@@ -77,7 +82,24 @@ const GenerateFileButton = () => {
         console.error('Expected a blob response, but got:', response);
       }
     } catch (error) {
-      console.error('There has been a problem with your axios operation:', error);
+      if (axios.isAxiosError(error)) {
+        if (error.response && error.response.status === 403) {
+          toggleNotification({
+            type: "danger",
+            title: "Error",
+            message: 'You do not have permission to generate PDF Templates.',
+          });
+  
+        } else {
+          toggleNotification({
+            type: "danger",
+            title: "Error",
+            message: error.message,
+          });
+        }
+      } else {
+        console.error('An unknown error occurred:', error);
+      }
     }
   };
 

@@ -22,6 +22,7 @@ async function createPageFromTemplate(
       const dateFields = beautifyDate.fields;
       if (dateFields.some((item) => item === name)) {
         const date = new Date(Date.parse(data[name]));
+        return date.toLocaleDateString(undefined, beautifyDate.options);
       }
     }
     return(data[name] || null)};

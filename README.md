@@ -42,6 +42,11 @@ add the following to your `config/plugin.ts`
     config: {
       beautifyDate:{
         fields: [ 'date' ], // name of fields that will be changed
+        options: { // check JS toLocaleDateString options for details
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }
       }
     }
   },
@@ -59,6 +64,11 @@ add the following to your `config/plugin.ts`
 ## Usage
 
 ### Admin panel
+
+- The following must be enabled so a user can generate files:
+  - Inside Role editor, find the pdf plugin and allow role to generate document.
+  - The users' role must have  access to view content `template`.
+  - _By default super admins will be able to generate files_.
 
 - Once the first template is created and assigned to a collection type, the admin can navigate to an entry and a PDF button should appear on the right side menu.
   ![strapi pdf creator](./examples/fillable_fields/screenshots/screenshot1.png)
@@ -100,7 +110,6 @@ Enjoy 🎉
 
 ## TODO:
 
-- Security: Allow other roles to generate documents
 - Allow other fonts
 - Beautify date fields.
 - Settings function to validate template against schema.
