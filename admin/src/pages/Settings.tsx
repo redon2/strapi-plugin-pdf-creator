@@ -51,7 +51,6 @@ const SettingsPage = () => {
 
   return (
     <Layouts.Root>
-    <Page.Main>
       <Page.Title>{translate("home.title")}</Page.Title>
       <Layouts.Header
         id="header"
@@ -90,7 +89,6 @@ const SettingsPage = () => {
         )}
       </Layouts.Content>
     </Layouts.Root>
-    </Page.Main>
   );
 };
 
