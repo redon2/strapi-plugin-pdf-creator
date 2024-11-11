@@ -2,7 +2,13 @@ import type { Core } from '@strapi/strapi';
 const { PDFDocument, rgb } = require('pdf-lib');
 const fs = require('fs');
 
-async function createPageFromTemplate(templateBytes, data, templateName, flattenDocument, isTest) {
+async function createPageFromTemplate(
+  templateBytes: Buffer,
+  data,
+  templateName: string,
+  flattenDocument: boolean,
+  beautifyDate
+) {
   const pdfDoc = await PDFDocument.load(templateBytes);
   const form = pdfDoc.getForm();
   const fields = form.getFields();
@@ -11,7 +17,14 @@ async function createPageFromTemplate(templateBytes, data, templateName, flatten
   }
 
   const errors = [];
-  const getFieldValue = (name) => data[name] || null;
+  const getFieldValue = (name) => {
+    if (beautifyDate.fields.length > 0){
+      const dateFields = beautifyDate.fields;
+      if (dateFields.some((item) => item === name)) {
+        const date = new Date(Date.parse(data[name]));
+      }
+    }
+    return(data[name] || null)};
 
   for (const field of fields) {
     const type = field.constructor.name;
@@ -21,17 +34,16 @@ async function createPageFromTemplate(templateBytes, data, templateName, flatten
       case 'PDFTextField':
         const text = getFieldValue(name);
         if (text) {
-          form.getTextField(name).setText(text || '');
+          form.getTextField(name).setText(text);
         }
         break;
 
       case 'PDFButton':
         const button = form.getButton(name);
-        const buttonData = getFieldValue(name);
-        if (buttonData?.url) {
-          const imageUrl = isTest ? buttonData.url : `public${buttonData.url}`;
-          const imageBytes = fs.readFileSync(imageUrl);
-          const image = await pdfDoc.embedPng(imageBytes);
+        const imageData = getFieldValue(name);
+        
+        if (imageData?.url) {
+          const image = await pdfDoc.embedPng(imageData.imageBytes);
           button.setImage(image);
         }
         break;
@@ -108,17 +120,17 @@ const service = ({ strapi }: { strapi: Core.Strapi }) => ({
     data: any,
     templateName: string,
     flattenDocument: boolean,
-    isTest?: boolean
+    beautifyDate
   ): Promise<Uint8Array> {
     const pdf = await createPageFromTemplate(
       templateBytes,
       data,
       templateName,
       flattenDocument,
-      isTest
+      beautifyDate
     );
     return pdf;
-  },
+  }
 });
 
 export default service;

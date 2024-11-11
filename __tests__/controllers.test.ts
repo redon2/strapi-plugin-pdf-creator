@@ -6,16 +6,18 @@ describe('Controller', () => {
   let ctx: any;
 
   beforeEach(async function () {
-    // Setup the actual `strapi` object with the real services
+
     strapi = {
       plugin: jest.fn().mockReturnValue({
         service: jest.fn().mockReturnValue({
-          getWelcomeMessage: services.service({ strapi }).getWelcomeMessage, // Use the actual service function
+          getWelcomeMessage: services.service({ strapi }).getWelcomeMessage,
         }),
       }),
       config: {
         get: jest.fn().mockReturnValue({
-          setting1: false,
+          beautifyDate: {
+            fields: ['dateField'],
+          },
         }),
       },
       contentTypes: {
@@ -47,7 +49,11 @@ describe('Controller', () => {
       const controller = controllers.controller({ strapi });
       await controller.settings(ctx);
       // Ensure the settings body is serialized as a string
-      expect(ctx.body).toEqual({ setting1: false });
+      expect(ctx.body).toEqual({
+        beautifyDate: {
+          fields: ['dateField'],
+        },
+      });
     });
   });
   describe('Get content types', () => {
@@ -55,7 +61,7 @@ describe('Controller', () => {
       const controller = controllers.controller({ strapi });
       await controller.contentTypes(ctx);
       // Ensure the settings body is serialized as a string
-      expect(ctx.body).toEqual([{"globalId": "abc123", "name": "api::article.article"}]);
+      expect(ctx.body).toEqual([{ globalId: 'abc123', name: 'api::article.article' }]);
     });
   });
 });

@@ -40,7 +40,9 @@ add the following to your `config/plugin.ts`
   'strapi-plugin-pdf-creator': {
     enabled: true,
     config: {
-      permissions: 'none' // coming soon
+      beautifyDate:{
+        fields: [ 'date' ], // name of fields that will be changed
+      }
     }
   },
 }
