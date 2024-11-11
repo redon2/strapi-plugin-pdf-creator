@@ -1,6 +1,6 @@
 import { useNotification } from '@strapi/strapi/admin';
 import { Layouts, Page } from "@strapi/admin/strapi-admin";
-import { Button, Tabs, Loader } from "@strapi/design-system";
+import { Tabs, Loader } from "@strapi/design-system";
 import { useState, useCallback, useEffect } from "react";
 import { useFetchClient } from '@strapi/strapi/admin';
 import { useTr } from '../hooks/useTr';
@@ -9,7 +9,14 @@ import TemplateTab from "./TemplateTab";
 import SettingsTab from './SettingsTab';
 import handleAPIError, { ToBeFixed } from '../utils/handleApiError';
 import { SettingsType } from 'src/types';
+// import { PERMISSIONS } from '../constants';
 
+
+export const ProtectedSettingsPage = () => (
+  // <Page.Protect permissions={PERMISSIONS.settings}> // NEED TO FIX actual page rendering.
+    <SettingsPage />
+  // </Page.Protect>
+);
 const SettingsPage = () => {
   const client = useFetchClient();
   const [settings, setSettings] = useState<SettingsType | null>(null);
@@ -44,16 +51,12 @@ const SettingsPage = () => {
 
   return (
     <Layouts.Root>
+    <Page.Main>
       <Page.Title>{translate("home.title")}</Page.Title>
       <Layouts.Header
         id="header"
         title={translate("home.title")}
         subtitle={translate("home.subtitle")}
-        // primaryAction={
-        //   <Button onClick={() => toggleNotification({ type: 'success', message: 'Home clicked!' })}>
-        //     {translate("home.button")}
-        //   </Button>
-        // }
       />
       <Layouts.Content>
         {loading ? ( 
@@ -87,7 +90,7 @@ const SettingsPage = () => {
         )}
       </Layouts.Content>
     </Layouts.Root>
+    </Page.Main>
   );
 };
 
-export { SettingsPage };

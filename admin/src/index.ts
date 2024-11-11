@@ -2,10 +2,10 @@ import { prefixPluginTranslations } from './utils/prefixPluginTranslations';
 import { PLUGIN_ID } from './pluginId';
 import { Initializer } from './components/Initializer';
 import GenerateFileButton from './components/GenerateFileButton';
+import { PERMISSIONS } from './constants';
 
 export default {
   register(app: any) {
-
     app.createSettingSection(
       {
         id: PLUGIN_ID,
@@ -21,9 +21,9 @@ export default {
           to: PLUGIN_ID,
           Component: () =>
             import('./pages/Settings').then((mod) => ({
-              default: mod.SettingsPage,
+              default: mod.ProtectedSettingsPage,
             })),
-          // permissions: PERMISSIONS.settings,
+          permissions: PERMISSIONS.settings,
         },
       ]
     );
@@ -34,14 +34,12 @@ export default {
       isReady: false,
       name: PLUGIN_ID,
     });
-    
   },
   bootstrap(app: any) {
     app.getPlugin('content-manager').injectComponent('editView', 'right-links', {
       name: 'PDF Creator',
-      Component: GenerateFileButton
+      Component: GenerateFileButton,
     });
-
   },
 
   async registerTrads(app: any) {

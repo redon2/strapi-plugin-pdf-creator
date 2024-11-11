@@ -12,6 +12,12 @@ const registerPermissionActions = async () => {
       displayName: 'Generate PDF from templates',
       uid: 'generate',
       pluginName: PLUGIN_ID,
+    },
+    {
+      section: 'plugins',
+      displayName: 'Manage plugin Settings',
+      uid: 'admin',
+      pluginName: PLUGIN_ID,
     }
   ];
 
