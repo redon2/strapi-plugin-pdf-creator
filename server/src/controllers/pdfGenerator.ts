@@ -43,9 +43,14 @@ const pdfGenerator = ({ strapi }: { strapi: Core.Strapi }) => ({
       );
       return;
     }
-    const templateBytes = fs.readFileSync(
-      ctx.isTest ? template.file.url : `public${template.file.url}`
-    );
+    let templateBytes = null;
+    if (template.file.url.startsWith("http")) {
+      templateBytes = Buffer.from(await (await fetch(template2.file.url)).arrayBuffer());
+    } else {
+      templateBytes = fs.readFileSync(
+        ctx.isTest ? template.file.url : `public${template.file.url}`
+      );
+    }
     const conf: Config = strapi.config.get(`plugin::${PLUGIN_ID}`);
     const genDoc = await strapi
       .plugin(PLUGIN_ID)
