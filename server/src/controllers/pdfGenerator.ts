@@ -45,7 +45,7 @@ const pdfGenerator = ({ strapi }: { strapi: Core.Strapi }) => ({
     }
     let templateBytes = null;
     if (template.file.url.startsWith("http")) {
-      templateBytes = Buffer.from(await (await fetch(template2.file.url)).arrayBuffer());
+      templateBytes = Buffer.from(await (await fetch(template.file.url)).arrayBuffer());
     } else {
       templateBytes = fs.readFileSync(
         ctx.isTest ? template.file.url : `public${template.file.url}`
